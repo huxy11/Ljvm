@@ -8,25 +8,31 @@ static char *code_main =
 "	public int t = 0;"
 "	public static void main(String[] args){"
 "		Test test = new Test();"
-"		test.a = 8;"
+"		test.int_0 = 5;"
 "	}";
 
-static char *code_format = 
+static char *method_format = 
 "public static int test_%d(){"
 "	return %d + %d;"
 "}";
+static char *publicint_format = 
+"public int int_%d;";
 
 int main(int args, char* argv[]) {
-	FILE *fp = fopen("/home/hu/Test.java", "w");
+	FILE *fp = fopen("/tmp/Test.java", "w");
 	assert(fp);
-	int32_t cnt;
-	scanf("%d", &cnt);	
+	int32_t cnt = 5;
+	//scanf("%d", &cnt);	
 	printf("Generating Java code, methods counts = %d\n", cnt);
 	fputs(code_main, fp);
 	for (int32_t i = 0; i < cnt; ++i){
-		sprintf(code_buf, code_format, i, i, i);
+		sprintf(code_buf, method_format, i, i, i);
+		fputs(code_buf, fp);
+		sprintf(code_buf, publicint_format, i);
 		fputs(code_buf, fp);
 	}
 	fputs("}", fp);
 	fclose(fp);
+	int ret = system("javac /tmp/Test.java");
+	assert(ret);
 }

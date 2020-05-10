@@ -2,16 +2,17 @@
 
 int cf_parse(char *filename) {
 	CF_header header;
-	CF_info info;
-	int fp = fopen(filename, 'r');
-	assert(fp);
-	fseek(filename, 0, 0);
-	fread(&header, sizeof(header));
-	printf("%#x, %#x, %#x\n", header.magic, header.minor_version, header.major_version);
-	fs_close;
+	CF_constpool constpool;
+	load_classfile(filename);
+	header.magic = get_u4();
+	header.minor_version = get_u2();
+	header.major_version = get_u2();
+	constpool.cnt = get_u2();	
+	for (int i = 0; i < constpool.cnt; ++i) {
+	}
 	return 0;
 }
 
 int main(int args, char* argv[]) {
-	cf_parse(""
+	cf_parse("Test.class");
 }
